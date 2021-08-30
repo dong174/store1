@@ -47,8 +47,13 @@ for i in range(10):
 choose = choice(discount)
 print("您的优惠券为：", choose)
 # 2.准备钱包
-money = input("请初始化您的余额：")
-money = int(money)
+while True:
+    money = input("请初始化您的余额：")
+    if money.isdigit():
+        money = int(money)
+        break
+    else:
+        print("--------请输入数字！！！--------")
 
 # 3.空购物车
 mycart = []
