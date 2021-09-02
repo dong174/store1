@@ -49,6 +49,12 @@ def adduser():
         userinfo = {'account': account, 'username': username, 'password': password, 'country': country,
                     'province': province, 'street': street, 'door': door, 'money': money, 'bank_name': bank_name}
         bank.append(userinfo)
+        if username in bank:
+            return 2
+        if len(bank) >= 100:
+            return 3
+        else:
+            print('添加用户成功！')
         answer = input('是否继续添加？y/n')
         if answer == 'y' or answer == 'Y':
             continue
@@ -95,6 +101,7 @@ def save_money():
                         break
                 wfile.write(str(d) + '\n')
                 print('存款成功！！！')
+
             else:
                 print('没有找到用户信息')
                 wfile.write(str(d) + '\n')
@@ -112,13 +119,14 @@ def withdraw():
     else:
         return
     user_account = input('请输入要取款的用户的ID：')
+    user_password = input('请输入密码：')
     with open(filename, 'w', encoding='utf-8')as wfile:
         for item in user_old:
 
             d = dict(eval(item))
-            print(d['money'])
-            print(type(d['money']))
-            if d['account'] == user_account:
+            # print(d['money'])
+            # print(type(d['money']))
+            if d['account'] == user_account and d['password'] == user_password:
                 print('成功找到用户，请输入要取出的钱数：')
                 while True:
                     a = int(input('请输入取款钱数：'))
@@ -126,6 +134,7 @@ def withdraw():
                         d['money'] = int(d['money']) - a
                         print('成功取款，余额为：',d['money'])
                         wfile.write(str(d) + '\n')
+
                         answer = input('是否继续取款？y/n')
                         if answer == 'y' or answer == 'Y':
                             withdraw()
@@ -139,7 +148,44 @@ def withdraw():
                 wfile.write(str(d) + '\n')
 
 def transfer():
-    pass
+    show()
+    if os.path.exists(filename):
+        with open(filename, 'r', encoding='utf-8')as rfile:
+            user_old = rfile.readlines()
+            # print(user_old)
+    else:
+        return
+    user1_account = input('请输入转出的用户的ID：')
+    user2_account = input('请输入收账的用户ID：')
+    with open(filename, 'w', encoding='utf-8')as wfile:
+        for item in user_old:
+
+            d1 = dict(eval(item))
+            d2 = dict(eval(item))
+            if d1['account'] == user1_account :
+                print('成功找到用户，请输入要转出的钱数：')
+                if d2['account'] == user2_account:
+                    while True:
+                        a = int(input('请输入转出钱数：'))
+                        if a <= int(d1['money']):
+                            d1['money'] = int(d1['money']) - a
+                            print('成功转账，余额为：', d1['money'])
+                            d2['money'] = int(d2['money']) + a
+                            wfile.write(str(d1) + '\n')
+                            wfile.write(str(d2) + '\n')
+                            answer = input('是否继续转账？y/n')
+                            if answer == 'y' or answer == 'Y':
+                                withdraw()
+                            else:
+                                break
+                        else:
+                            print('该转账用户没有足够的存款')
+                            break
+            else:
+                continue
+                # print('没有找到用户信息')
+                # wfile.write(str(d1) + '\n')
+                # wfile.write(str(d2) + '\n')
 
 
 def search():
@@ -147,13 +193,14 @@ def search():
     while True:
         if os.path.exists(filename):
             id = input('请输入需要查询的用户ID：')
+            password=input('请输入密码：')
             with open(filename, 'r', encoding='utf-8')as rfile:
                 user = rfile.readlines()
                 for item in user:
                     d = dict(eval(item))
                     # print(d)
-                    if id != '':
-                        if d['account'] == id:
+                    if id !='' and password!='':
+                        if d['account'] == id and d['password']==password:
                             user_query.append(d)
             show_info(user_query)
             user_query.clear()
