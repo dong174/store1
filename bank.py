@@ -211,7 +211,7 @@ def search():
                 break
         else:
             print('没有找到用户信息')
-            return 
+            return
 
 
 def show_info(lst):
