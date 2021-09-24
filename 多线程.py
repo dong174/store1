@@ -4,8 +4,8 @@ import time
 
 breadNum = 0
 
-class cook(threading.Thread):
 
+class cook(threading.Thread):
     def __init__(self,username):
         threading.Thread.__init__(self)
         self.name = username
@@ -28,22 +28,24 @@ class customer(threading.Thread):
 def do(cookName):
     global breadNum
     while breadNum >= 0:
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
         breadNum = breadNum + 1
 
-        print(cookName,"做了",breadNum,'个面包')
-        if breadNum == 200:
-            time.sleep(0.5)
+        print(cookName,"做了",breadNum,'个蛋挞')
+        if breadNum == 500:
+            time.sleep(3)
 
 def sale(customer,saleNum,money):
     global breadNum
     while money:
-        time.sleep(1)
+        # time.sleep(1)
         saleNum = saleNum + 1
         breadNum = breadNum-1
         money = money - 2
-        print(customer,"买了",saleNum,"个面包")
+        print(customer,"买了",saleNum,"个蛋挞")
+        if breadNum == 0:
+            time.sleep(2)
         if money == 0:
             break
 
