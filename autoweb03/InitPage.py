@@ -47,19 +47,21 @@ class InitPage:
     #     login = zip(title, data)
     #     loginError_data.append(dict(login))
 # ================================================================================
-#     sql2 = "select * from Login"
-#     cursor.execute(sql2)
+    sql2 = "select * from Login"
+    cursor.execute(sql2)
 #     des = cursor.description
 #     a = [item[0] for item in des]
 #     print(a)
-#     data1 = cursor.fetchall()
-#     data = list(data1)
-#     print(data)
-#     column_list = []
-#     for i in data:
-#         # 提取字段名，追加到列表中
-#         column_list.append(i[0])
-#     print(column_list)
+    data = cursor.fetchall()
+    for i in range(2):
+        dict = {'username': data[i][0], 'password': data[i][1], 'expect': data[i][2]}
+        loginSuccess_data.append(dict)
+    print(loginSuccess_data)
+
+    for j in range(2,4):
+        dict = {'username': data[j][0], 'password': data[j][1], 'expect': data[j][2]}
+        loginError_data.append(dict)
+    print(loginError_data)
 
     # login_error_data = [
     #     # id : msg_uname
